@@ -1,3 +1,8 @@
+---
+title: Hello World
+---
+Welcome to [Hexo](https://hexo.io/)! This is your very first post. Check [documentation](https://hexo.io/docs/) for more info. If you get any problems when using Hexo, you can find the answer in [troubleshooting](https://hexo.io/docs/troubleshooting.html) or you can ask me on [GitHub](https://github.com/hexojs/hexo/issues).
+
 # IO模型之字节流
 
 　　JAVA程序通过流来完成输入/输出。流是生产或消费信息的抽象，流通过JAVA的输入输出与物理设备链接，尽管与它们链接的物理设备不尽相同，所有流的行为具有相同的方式。这样就意味一个输入流能够抽象多种不同类型的输入：从磁盘文件、从键盘或从网络套接字；同样，一个输出流可以输出到控制台、磁盘文件或相连的网络。
