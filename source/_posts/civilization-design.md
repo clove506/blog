@@ -1,0 +1,931 @@
+---
+title: C端2.0改版--内容管理系统
+date: 2017-4-17 17:30:00
+categories: C++
+tags:
+- C++
+- Web
+---
+
+## 内容系统（Civilization）
+
+内容系统这里提供知识内容的底层支持，原则上不直接对外提供服务。
+<!--more-->
+
+### 单一查询接口
+
+#### 获取自测详情
+
+GET /api/civilization/v1/self-evaluations/{evaluationId}
+
+Halo
+
+``` java
+Civilization.SelfEvaluationDetailDTO getSelfEvaluationById(@Param("evaluationId") Long evaluationId)
+```
+
+``` protobuf
+ message SelfEvaluationDetailDTO {
+
+    message Question {
+        message SingleChoice {
+            optional string choice = 1;
+            optional int64 order = 2;
+        }
+
+        message MultiChoice {
+            optional string choice = 1;
+            optional int64 order = 2;
+        }
+
+        message Completion {
+            optional string content = 1; //"血压:${BLANK} mmHg；血糖:${BLANK} mmol/L;您的意见:${BLANK}"
+        }
+
+        message SingleChoiceMatrix {
+            message OptionContent {
+                optional int64 rank = 1;
+                optional string content = 2;
+                repeated string choice = 3;
+            }
+            repeated OptionContent optionContent = 1;
+        }
+
+        optional int64 questionId = 1;
+        optional string questionType = 2;
+        optional string questionContent = 3;
+        optional string questionDesc = 4;
+        repeated string questionDescPicUrl = 5;
+        repeated SingleChoice singleChoice = 6;
+        repeated MultiChoice multiChoice = 7;
+        optional Completion completion = 8;
+        optional SingleChoiceMatrix singleChoiceMatrix = 9;
+        optional int64 order = 10;
+    }
+    optional Result result = 1;
+    repeated Question question = 2;
+    optional int64 evaluationId = 3;
+    optional string evaluationName = 4;
+    optional string iconColor = 5;
+    optional string icon = 6;
+}
+```
+
+#### 获取评估详情
+
+GET /api/civilization/v1/professional-evaluations/{evaluationId}
+
+Halo
+
+``` java
+Civilization.ProfessionalEvaluationDetailDTO getProfessionalEvaluationById(@Param("evaluationId") Long evaluationId);
+```
+
+``` protobuf
+message ProfessionalEvaluationDetailDTO {
+
+    message Question {
+        message SingleChoice {
+            optional string choice = 1;
+            optional int64 order = 2;
+        }
+
+        message MultiChoice {
+            optional string choice = 1;
+            optional int64 order = 2;
+        }
+
+        message Completion {
+            optional string content = 1; //"血压:${BLANK} mmHg；血糖:${BLANK} mmol/L;您的意见:${BLANK}"
+        }
+
+        message SingleChoiceMatrix {
+            message OptionContent {
+                optional int64 rank = 1;
+                optional string content = 2;
+                repeated string choice = 3;
+            }
+            repeated OptionContent optionContent = 1;
+        }
+
+        optional int64 questionId = 1;
+        optional string questionType = 2;
+        optional string questionContent = 3;
+        optional string questionDesc = 4;
+        repeated string questionDescPicUrl = 5;
+        repeated SingleChoice singleChoice = 6;
+        repeated MultiChoice multiChoice = 7;
+        optional Completion completion = 8;
+        optional SingleChoiceMatrix singleChoiceMatrix = 9;
+        optional int64 order = 10;
+    }
+
+    optional Result result = 1;
+    repeated Question question = 2;
+    optional int64 evaluationId = 3;
+    optional string evaluationName = 4;
+    optional string iconColor = 5;
+    optional string icon = 6;
+}
+```
+
+#### 获取宣教用户互动信息 
+
+GET /api/civilization/v1/articles/{articleId}/user-interaction/{userId}
+
+Halo
+
+``` java
+Civilization.ArticleUserInteractionDTO getArticleUserInteractionByUserId(@Param("userId") Long userId, @Param("articleId") Long articleId)
+```
+
+``` protobuf
+message ArticleUserInteractionDTO {
+    optional int64 articleId = 1;
+    optional bool liked = 2;
+    optional bool favored = 3;
+    optional bool read = 4;
+    optional Result result = 5;
+}
+
+```
+
+#### 获取自测结果
+
+GET /api/civilization/v1/self-evaluations/records/{recordId}
+
+Halo
+
+``` java
+Civilization.SelfEvaluationResultDTO getSelfEvaluationResultById(@Param("recordId") Long recordId);
+```
+
+``` protobuf
+ message SelfEvaluationResultDTO {
+
+    message QuestionAnswer {
+        message SingleChoice {
+            optional string choice = 1;
+        }
+
+        message MultiChoice {
+            optional string choice = 1;
+        }
+
+        message Completion {
+            optional string content = 1;
+        }
+
+        message SingleChoiceMatrix {
+            message OptionContent {
+                optional int64 rank = 1;
+                optional string content = 2;
+                optional string answer = 3;
+            }
+            repeated OptionContent optionContent = 1;
+        }
+
+        optional int64 questionId = 1;
+        optional string questionType = 2;
+        optional string questionContent = 3;
+        repeated string questionDescPicUrl = 5;
+        optional SingleChoice singleChoice = 6;
+        optional MultiChoice multiChoice = 7;
+        optional Completion completion = 8;
+        optional SingleChoiceMatrix singleChoiceMatrix = 9;
+        optional int64 order = 10;
+    }
+
+    optional int64 recordId = 1;
+    optional Result result = 2;
+    optional int64 userId = 3;
+    optional int64 departmentId = 4;
+    optional string departmentName = 5;
+    optional int64 organizationId = 6;
+    optional string organizationName = 7;
+    optional int64 evaluationId = 8;
+    optional string evaluationName = 9;
+    optional string conclusion = 10;
+    repeated QuestionAnswer answer = 11;
+    optional string iconColor = 12;
+    optional string icon = 13;
+    optional int64 createdAt = 14;
+    optional int64 updatedAt = 15;
+}
+```
+
+#### 获取评估结果
+
+GET /api/civilization/v1/professional-evaluations/records/{recordId}
+
+Halo
+
+``` java
+Civilization.ProfessionalEvaluationResultDTO getProfessionalEvaluationResultById(@Param("recordId") Long recordId);
+```
+
+``` protobuf
+ message ProfessionalEvaluationResultDTO {
+
+    message QuestionAnswer {
+        message SingleChoice {
+            optional string choice = 1;
+        }
+
+        message MultiChoice {
+            optional string choice = 1;
+        }
+
+        message Completion {
+            optional string content = 1;
+        }
+
+        message SingleChoiceMatrix {
+            repeated OptionContent optionContent = 1;
+            message OptionContent {
+                optional int64 rank = 1;
+                optional string content = 2;
+                optional string answer = 3;
+            }
+        }
+
+        optional int64 questionId = 1;
+        optional string questionType = 2;
+        optional string questionContent = 3;
+        repeated string questionDescPicUrl = 5;
+        optional SingleChoice singleChoice = 6;
+        optional MultiChoice multiChoice = 7;
+        optional Completion completion = 8;
+        optional SingleChoiceMatrix singleChoiceMatrix = 9;
+        optional int64 order = 10;
+    }
+
+    optional int64 recordId = 1;
+    optional Result result = 2;
+    optional int64 userId = 3;
+    optional int64 departmentId = 4;
+    optional string departmentName = 5;
+    optional int64 organizationId = 6;
+    optional string organizationName = 7;
+    optional int64 evaluationId = 8;
+    optional string evaluationName = 9;
+    optional string conclusion = 10;
+    repeated QuestionAnswer answer = 11;
+    optional string iconColor = 12;
+    optional string icon = 13;
+    optional int64 createdAt = 14;
+    optional int64 updatedAt = 15;
+}
+```
+
+#### 获取自测预览接口 TODO
+
+#### 获取评估预览接口 TODO
+
+#### 获取宣教互动信息 
+
+GET /api/civilization/v1/articles/{articleId}/interaction
+
+Halo
+
+```java
+Civilization.ArticleInteractionDTO getArticleInteractionById(@Param("articleId") Long articleId)
+```
+
+```protobuf
+message ArticleInteractionDTO {
+    optional int64 articleId = 1;
+    optional int64 likeCount = 2;
+}
+```
+
+#### 宣教内容详情
+
+GET /api/civilization/v1/articles/{articleId}/content
+
+Halo
+
+``` java
+Civilization.ArticleContentDTO getArticleContentById(@Param("articleId") Long articleId)
+```
+
+``` protobuf
+
+message ArticleContentDTO {
+    optional int64 id = 1;
+    optional string name = 2;
+    optional string brief = 3;
+    optional string creatorId = 4;
+    optional string creatorName = 5;
+    optional string bannerUrl = 6;
+    optional string content = 7;
+    optional int64 categroyId = 8;
+    optional string categroyName = 9;
+    optional Result result = 10;
+}
+```
+
+### 批量查询接口
+
+#### 批量获取自测详情列表 
+
+GET /api/civilization/v1/self-evaluations/general-info
+
+
+Halo
+
+``` java
+Civilization.SelfEvaluationGeneralInfoListDTO getSelfEvaluationByIds(Civilization.EvaluationQueryBatchOption option);
+```
+
+``` protobuf
+message EvaluationQueryBatchOption {
+    repeated int64 evaluationId = 1;
+}
+
+message SelfEvaluationGeneralInfoListDTO {
+    optional Result result = 1;
+    repeated Data data = 2;
+    message Data {
+        optional int64 evaluationId = 1;
+        optional string evaluationName = 2;
+        optional string iconColor = 5;
+        optional string icon = 6;
+        optional int64 departmentId = 7;
+    }
+}
+```
+
+
+#### 批量获取评估详情列表 
+
+GET /api/civilization/v1/professional-evaluations/general-info
+
+Halo
+
+``` java
+Civilization.ProfessionalEvaluationGeneralInfoListDTO getProfessionalEvaluationByIds(Civilization.EvaluationQueryBatchOption option)
+```
+
+``` protobuf
+message EvaluationQueryBatchOption {
+    repeated int64 evaluationId = 1;
+}
+
+message ProfessionalEvaluationGeneralInfoListDTO {
+    optional Result result = 1;
+    repeated Data data = 2;
+    message Data {
+        optional int64 evaluationId = 1;
+        optional string evaluationName = 2;
+        optional string iconColor = 3;
+        optional string icon = 4;
+        optional int64 departmentId = 5;
+    }
+}
+```
+
+#### 获取科室下自测详情列表
+
+GET /api/civilization/v1/{departmentId}/self-evaluations/general-info
+
+Halo
+
+``` java
+Civilization.SelfEvaluationGeneralInfoListDTO getSelfEvaluationByDepartmentId(@Param("departmentId") Long departmentId);
+```
+
+``` protobuf
+message SelfEvaluationGeneralInfoListDTO {
+    optional Result result = 1;
+    repeated Data data = 2;
+    message Data {
+        optional int64 evaluationId = 1;
+        optional string evaluationName = 2;
+        optional string iconColor = 5;
+        optional string icon = 6;
+        optional int64 departmentId = 7;
+    }
+}
+```
+
+#### 获取科室下评估详情列表
+
+GET /api/civilization/v1/{departmentId}/professional-evaluations/general-info
+
+Halo
+
+``` java
+Civilization.ProfessionalEvaluationGeneralInfoListDTO getProfessionalEvaluationByDepartmentId(@Param("departmentId") Long departmentId);
+```
+
+``` protobuf
+message ProfessionalEvaluationGeneralInfoListDTO {
+    optional Result result = 1;
+    repeated Data data = 2;
+    message Data {
+        optional int64 evaluationId = 1;
+        optional string evaluationName = 2;
+        optional string iconColor = 3;
+        optional string icon = 4;
+        optional int64 departmentId = 5;
+    }
+}
+```
+
+#### 批量获取宣教用户互动信息接口
+
+GET /api/civilization/v1/articles/user-interaction/{userId}
+
+Halo
+
+``` java
+Civilization.ArticleUserInteractionListDTO getArticleUserInteractionListByUserId(@Param("userId") Long userId);
+```
+
+``` protobuf
+
+message ArticleUserInteractionListDTO {
+    message Article {
+        optional int64 id = 1;
+        optional string name = 2;
+        optional string brief = 3;
+        optional string bannerUrl = 4;
+    }
+    message ArticleUserInteraction {
+        optional Article article = 1;
+        optional bool liked = 2;
+        optional bool favored = 3;
+        optional bool read = 4;
+    }
+    optional Result result = 1;
+    repeated ArticleUserInteraction articleUserInteraction = 2;
+}
+```
+
+#### 批量获取宣教互动信息
+
+GET /api/civilization/v1/articles/interaction
+
+Halo
+
+```java
+Civilization.ArticleInteractionListDTO getArticleInteractionListByIds(Civilization.ArticleQueryBatchOption option)
+```
+
+``` protobuf
+message ArticleInteractionListDTO {
+    message ArticleInteraction {
+        optional int64 articleId = 1;
+        optional int64 likeCount = 2;
+    }
+    optional Result result = 1;
+    repeated ArticleInteraction ArticleInteraction = 2;
+}
+
+```
+
+#### 批量获取宣教内容详情
+
+GET /api/civilization/v1/articles/content
+
+Halo
+
+``` java
+Civilization.ArticleListDTO getArticleContentByIds(Civilization.ArticleQueryBatchOption option)
+```
+
+``` protobuf
+message ArticleQueryBatchOption {
+    repeated int64 articleId = 1;
+}
+
+message ArticleListDTO {
+    message Article {
+        optional int64 id = 1;
+        optional string name = 2;
+        optional string brief = 3;
+        optional string creatorId = 4;
+        optional string creatorName = 5;
+        optional string bannerUrl = 6;
+        optional string departmentId = 7;
+
+    }
+    optional Result result = 1;
+    repeated Article article = 2;
+}
+```
+
+### 根据疾病ID获取宣教列表
+TODO
+
+GET /api/civilization/v1/articles/{diseaseId}
+
+Halo
+
+```java
+ArticleContentListDTO getArticlesByDiseaseId(Long diseaseId){
+}
+```
+
+```protobuf
+message ArticleStructureListDTO {
+
+    message Content {
+        message Structure {
+            optional string name = 1;
+            optional string levelOneId = 2;
+            optional string levelOneName = 3;
+            optional string levelTwoId = 4;
+            optional string levelTwoName = 5;
+        }
+        optional int64 id = 1;
+        optional string name = 2;
+        optional string brief = 3;
+        optional string creatorId = 4;
+        optional string creatorName = 5;
+        optional string bannerUrl = 6;
+        optional Structure structure = 7;
+    }
+    optional Result result = 1;
+    repeated Content content = 2;
+
+}
+```
+
+### 根据科室ID获取信息
+
+最多两级分类支持 
+
+目前科室自建只支持一级，有默认一级分组「DEFAULT」
+
+#### 宣教
+
+带分组信息
+
+GET /api/civilization/v1/articles/{departmentId}/user-interaction
+
+Halo
+
+```java
+Civilization.ArticleStructureListDTO getArticleStructureByDeparmentId(@Param("departmentId") Long departmentId)
+```
+
+``` protobuf
+message ArticleDiseaseStructureListDTO{
+   
+    message ArticleContent {
+         message DiseaseStructure {
+            optional string name = 1;
+            optional string levelOneId = 2; 
+            optional string levelOneName = 3; 
+            optional string levelTwoId = 4; 
+            optional string levelTwoName = 5;     
+        }
+        optional int64 id = 1;
+        optional string name = 2;
+        optional string brief = 3;
+        optional string creatorId = 4;
+        optional string creatorName = 5;
+        optional string bannerUrl = 6;
+        optional string content = 7; 
+        optional DiseaseStructure diseaseStructure = 7; 
+    }    
+    optional Result result = 1;
+    repeated ArticleContent articleContent = 2;
+
+}
+```
+
+
+#### 评估
+
+带分组信息
+
+GET /api/civilization/v1/professional-evaluations/{departmentId}
+
+Halo
+
+``` java
+Civilization.ProfessionalStructureListDTO getProfessinalEvaluationStructureByDepartmentId(@Param("departmentId") Long departmentId)
+```
+
+``` protobuf
+message ProfessionalStructureListDTO {
+    optional Result result = 1;
+    optional Data data = 2;
+    message Data {
+        optional int64 evaluationId = 1;
+        optional string evaluationName = 2;
+    }
+}
+
+```
+
+#### 自测
+
+带分组信息
+
+GET /api/civilization/v1/self-evaluations/{departmentId}
+
+Halo
+
+``` java
+Civilization.SelfEvaluationStructureListDTO getSelfEvaluationStructureByDepartmentId(@Param("departmentId") Long departmentId)
+```
+
+``` protobuf
+message SelfEvaluationStructureListDTO {
+    optional Result result = 1;
+    optional Data data = 2;
+    message Data {
+        optional int64 evaluationId = 1;
+        optional string evaluationName = 2;
+
+    }
+}
+```
+
+
+### 提交评估
+
+POST /api/civilization/v1/professional-evaluation/{evaluationId}/submit
+
+Halo：
+
+``` java
+Civilization.ProfessionalEvaluationResultDTO submitProfessionalEvaluation(Civilization.ProfessionalEvaluationSubmitOption option, @Param("evaluationId") Long evaluationId)
+```
+
+
+``` protobuf
+message ProfessionalEvaluationSubmitOption {
+    message Answer {
+        optional int64 order = 1;
+        repeated string content = 2;
+    }
+    repeated Answer answer = 1;
+}
+```
+
+单选题答案示例：["1"]
+
+多选题答案示例：["1","2"]
+
+填空题答案示例：["心情不好","经常失眠",""] （您有哪些诉求，请举3个例子，1.{BLANK}，2.{BLANK}，3.{BLANK}）
+
+单选矩阵答案示例：["1","2"]
+
+
+### 提交自测
+
+POST /api/civilization/v1/self-evaluation/{evaluationId}/submit
+
+Halo：
+
+```java
+Civilization.SelfEvaluationResultDTO submitSelfEvaluation(@Param("evaluationId") Long evaluationId, Civilization.SelfEvaluationSubmitOption option)
+```
+
+```protobuf
+message SelfEvaluationSubmitOption {
+    message Answer {
+        optional int64 order = 1;
+        repeated string content = 2;
+    }
+    repeated Answer answer = 1;
+}
+```
+
+单选题答案示例：["1"]
+
+多选题答案示例：["1","2"]
+
+填空题答案示例：["心情不好","经常失眠",""] （您有哪些诉求，请举3个例子，1.{BLANK}，2.{BLANK}，3.{BLANK}）
+
+单选矩阵答案示例：["1","2"]
+
+
+#### 更新宣教用户互动信息 
+
+PATCH /api/civilization/v1/articles/{articleId}/user-interaction/{userId}
+
+Halo
+
+```java
+Civilization.ArticleUserInteractionDTO updateArticleInteractionById(@Param("articleId") Long articleId,@Param("userId") Long userId, Civilization.ArticleInteractionOption option)
+```
+
+```protobuf
+message ArticleInteractionOption {
+    optional int64 articleId = 1;
+    optional bool liked = 2;
+    optional bool favored = 3;
+    optional bool read = 4;
+}
+```
+
+### 文章分组相关
+
+#### 获取科室下所有分组信息
+
+GET /api/civilization/v1/articles/{departmentId}/categories
+
+Halo
+
+```java
+Civilization.ArticleCategoryListDTO getArticleCategories(@Param("departmentId") Long departmentId)
+```
+
+```protobuf
+message ArticleCategoryListDTO {
+    message ArticleCategoryInfo {
+        optional int64 id = 1;
+        optional string name = 2;
+    }
+    optional Result result = 1;
+    repeated ArticleCategoryInfo articleCategoryInfo = 2;
+}
+
+```
+
+#### 创建文章
+
+POST /api/civilization/v1/article
+
+Halo
+
+```java
+Civilization.ArticleContentDTO addArticle(Civilization.ArticleAddOption option)
+```
+
+```protobuf
+message ArticleAddOption {
+    optional string name = 1;
+    optional string brief = 2;
+    optional string creatorId = 3;
+    optional string departmentId = 4;
+    optional string creatorName = 5;
+    optional string bannerUrl = 6;
+    optional string content = 7;
+    optional int64 categroyId = 8;
+}
+
+message ArticleContentDTO {
+    optional int64 id = 1;
+    optional string name = 2;
+    optional string brief = 3;
+    optional string creatorId = 4;
+    optional string creatorName = 5;
+    optional string bannerUrl = 6;
+    optional string content = 7;
+    optional int64 categroyId = 8;
+    optional string categroyName = 9;
+    optional Result result = 10;
+}
+```
+
+## TODO
+
+* 给每个科室的文章生成DEFAULT分组
+    
+    ```json
+    {
+        "groupName":"DEFAULT",
+        "articles":["","",""]
+
+    }
+    ```
+
+* 录入优护家的文章分组和百科节点的关系
+
+## 数据模型
+
+```sql
+CREATE TABLE `article` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `department_id` bigint(20) unsigned NOT NULL COMMENT '科室ID',
+  `name` varchar(255) NOT NULL COMMENT '文章名称',
+  `brief` varchar(255) DEFAULT NULL COMMENT '文章简介',
+  `author_id` bigint(20) unsigned NOT NULL COMMENT '作者ID',
+  `author_type` bigint(20) unsigned NOT NULL COMMENT '作者角色,[Nurse,Admin]',
+  `status` bigint(20) NOT NULL DEFAULT '0' COMMENT '文章状态 [草稿,已发布]',
+  `content` longtext COMMENT '文章正文',
+  `banner_url` varchar(512) DEFAULT NULL COMMENT '文章图片路径',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `article_department_id_idx` (`department_id`),
+  KEY `article_name_idx` (`name`),
+  KEY `article_author_id_idx` (`author_id`),
+  KEY `article_author_type_idx` (`author_type`),
+  KEY `article_status_idx` (`status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE `evaluation` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `author_id` bigint(20) unsigned NOT NULL COMMENT '作者ID',
+  `author_type` bigint(20) unsigned NOT NULL COMMENT '作者角色,[Nurse,Admin]',
+  `department_id` bigint(20) unsigned NOT NULL COMMENT '科室ID',
+  `type` bigint(20) NOT NULL COMMENT '0:自测,1:评估',
+  `status` bigint(20) NOT NULL DEFAULT '0' COMMENT '评估状态 0:草稿 1:已发布',
+  `name` varchar(255) NOT NULL COMMENT '评估名称',
+  `icon` bigint(20) unsigned DEFAULT NULL COMMENT 'icon id',
+  `icon_color` varchar(255) DEFAULT NULL COMMENT 'icon color',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `desc` text,
+  PRIMARY KEY (`id`),
+  KEY `evaluation_department_id_idx` (`department_id`),
+  KEY `evaluation_author_id_idx` (`author_id`),
+  KEY `evaluation_author_type_idx` (`author_type`),
+  KEY `evaluation_name_idx` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE `evaluation_submit_record` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `evaluation_id` bigint(20) unsigned NOT NULL COMMENT '评估ID',
+  `submitor_id` bigint(20) unsigned COMMENT '提交人Id',
+  `submitor_type` bigint(20) unsigned COMMENT '提交人类型',
+  `content` longtext COMMENT '提交的内容',
+  `content` longtext COMMENT '提交的内容',
+  `comment` longtext COMMENT '护士评价',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `mapping_evaluation_question_bundle` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `evaluation_id` bigint(20) unsigned NOT NULL COMMENT '评估ID',
+  `question_bundle_id` bigint(20) unsigned NOT NULL COMMENT '题组ID',
+  `rank` bigint(20) unsigned NOT NULL COMMENT '题组排序',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `mapping_evaluation_question_bundle_evaluation_id_idx` (`evaluation_id`),
+  KEY `mapping_evaluation_question_bundle_question_bundle_id_idx` (`question_bundle_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `question` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `name` longtext COMMENT '问题题目',
+  `desc` longtext COMMENT '问题题目',
+  `desc_pic_url` longtext COMMENT '问题题目',
+  `type` bigint(20) NOT NULL COMMENT '0:单选,1:多选,2:填空,3:单选矩阵',
+  `question_bundle_id` bigint(20) unsigned NOT NULL COMMENT '关联的题组ID',
+  `required` bit(1) NOT NULL DEFAULT b'0' COMMENT '0:必填,1:选填',
+  `rank` bigint(20) unsigned NOT NULL COMMENT '问题在问题组的顺序',
+  `content` longtext COMMENT '问题选项内容',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `question_type_idx` (`type`),
+  KEY `question_question_bundle_id_idx` (`question_bundle_id`),
+  KEY `question_required_idx` (`required`),
+  KEY `question_rank_idx` (`rank`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `question_bundle` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `author_id` bigint(20) unsigned NOT NULL COMMENT '作者ID',
+  `author_type` bigint(20) unsigned NOT NULL COMMENT '作者角色,[Nurse,Admin]',
+  `name` varchar(255) NOT NULL COMMENT '题组名称',
+  `desc` varchar(512) NOT NULL COMMENT '题组描述',
+  `type` bigint(20) NOT NULL COMMENT '0:自测,1:评估',
+  `department_id` bigint(20) unsigned NOT NULL COMMENT '科室ID',
+  `status` bigint(20) NOT NULL DEFAULT '0' COMMENT '题组状态 0:草稿 1:已发布',
+  `content` longtext COMMENT '结论以及 Tag Mapping',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `question_bundle_author_id_idx` (`author_id`),
+  KEY `question_bundle_author_type_idx` (`author_type`),
+  KEY `question_bundle_type_idx` (`type`),
+  KEY `question_bundle_department_id_idx` (`department_id`),
+  KEY `question_bundle_status_idx` (`status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `user_article` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) unsigned NOT NULL COMMENT '作者ID',
+  `article_id` bigint(20) unsigned NOT NULL COMMENT '作者ID',
+  `is_read` bigint(20) NOT NULL DEFAULT '1' COMMENT '患者是否已读，0：未读  1：已读',
+  `is_useful` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '是否有用，0:未知 1无用 2:有用',
+  `is_collected` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '是否收藏 0：否  1：是',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `user_article_user_id_article_id_uiq` (`user_id`,`article_id`),
+  KEY `user_article_user_id_idx` (`user_id`),
+  KEY `user_article_article_id_idx` (`article_id`),
+  KEY `user_article_is_read_idx` (`is_read`),
+  KEY `user_article_is_useful_idx` (`is_useful`),
+  KEY `user_article_is_collected_idx` (`is_collected`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+```
+
+
