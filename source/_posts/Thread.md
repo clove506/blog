@@ -1,3 +1,9 @@
+---
+title: thread-interview
+date: 2017-7-26 22:30:30
+categories: thread
+---
+
 1)现在有T1、T2、T3三个线程，你怎样保证T2在T1执行完后执行，T3在T2执行完后执行？
 
 可以利用Thread提供join方法，即在T2.start()语句后在T1.调用T2.join()。
