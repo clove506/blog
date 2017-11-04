@@ -1,5 +1,7 @@
 ---
 title: JWT多端登录策略
+date: 2017-8-26
+categories: JWT
 ---
 ## 背景
 
