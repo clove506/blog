@@ -1,7 +1,7 @@
 
 ---
 title: encoding前传
-date: 2017-10-26 22:30:30
+date: 2017-7-26 22:30:30
 categories: encoding
 ---
 # 字符集和编码

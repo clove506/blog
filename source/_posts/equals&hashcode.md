@@ -1,6 +1,6 @@
 ---
 title: equals&hashcode
-date: 2017-9-30 22:30:30
+date: 2017-7-30 22:30:30
 categories: Java
 ---
 ## Java HashCode()和equals()的若干问题
