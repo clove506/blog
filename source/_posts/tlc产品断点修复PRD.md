@@ -1,7 +1,7 @@
 ---
 title: 泰乐城六月项目 产品断点修复PRD
 date: 2017-6-18
-categories: tlc
+categories: API设计
 ---
 
 # 「泰乐城六月项目」产品断点修复PRD

@@ -1,7 +1,7 @@
 ---
 title: 泰乐城六月项目 产品断点修复技术文档
 date: 2017-6-30
-categories: tlc
+categories: API设计
 ---
 
 # 背景

@@ -2,7 +2,7 @@
 ---
 title: C端科室展示内容编辑后台 技术文档
 date: 2017-7-30
-categories: dpt-Content
+categories: API设计
 ---
 
 # 摘要
