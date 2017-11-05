@@ -79,7 +79,11 @@ volatile变量只保证了可见性，不保证原子性， 比如a++这种操�
 
 理解可见性，有序性，原子性是理解并发编程的一个重要基础。
 
+#### 参考文档
 
+1. http://www.cnblogs.com/dolphin0520/p/3920373.html#!comments
+2. http://www.infoq.com/cn/articles/java-memory-model-1
+3. https://ress.infoq.com/minibooks/java_memory_model/zh/pdf/think_deep_in_java_mem_model.pdf
 
 
 
