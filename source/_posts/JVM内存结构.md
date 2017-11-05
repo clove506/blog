@@ -146,6 +146,10 @@ JVM方法区是存储类结构信息的地方，将一个class文件解析成JVM
 	
 ## 总结
 
+以图结尾：
+![](https://yemengying.com/qiniu/image/image/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3java%E8%99%9A%E6%8B%9F%E6%9C%BA2.jpg)
+
+
 
 
 
