@@ -1,5 +1,10 @@
+---
+title: 线程池
+date: 2017-11-15 13:30:30
+categories: 死磕高并发
+---
 
-##
+### 线程池构造器解释
 
 每个变量的作用都已经标明出来了，这里要重点解释一下corePoolSize、maximumPoolSize、largestPoolSize三个变量。
 
