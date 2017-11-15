@@ -1,7 +1,7 @@
 ---
-title: Java8
+title: 异常处理
 date: 2017-11-4 23:30:30
-categories: Java8
+categories: 开发习惯
 ---i
 
 一般异常底层框架包括3部分，异常码，异常日志信息，用户提示信息。这些部分是由 Enum 实现的。如下：
