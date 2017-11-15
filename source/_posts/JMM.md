@@ -79,6 +79,7 @@ volatile变量只保证了可见性，不保证原子性， 比如a++这种操�
 
 理解可见性，有序性，原子性是理解并发编程的一个重要基础。
 
+
 #### 参考文档
 
 1. http://www.cnblogs.com/dolphin0520/p/3920373.html#!comments
