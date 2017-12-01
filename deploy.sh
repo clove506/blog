@@ -1,4 +1,5 @@
 #!/bin/sh
+git pull
 hexo generate
 cp -R public/* .deploy/clove506.github.io
 cd .deploy/clove506.github.io
